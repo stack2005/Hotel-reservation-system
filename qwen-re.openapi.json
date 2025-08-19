@@ -1,0 +1,1951 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "qwen-re",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Authentication"
+    },
+    {
+      "name": "Users"
+    },
+    {
+      "name": "Hotels"
+    },
+    {
+      "name": "Bookings"
+    },
+    {
+      "name": "Payments"
+    },
+    {
+      "name": "CheckIn"
+    },
+    {
+      "name": "Reports"
+    },
+    {
+      "name": "Admin"
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "用户注册",
+        "deprecated": false,
+        "description": "创建新用户账户（普通用户或宾馆管理员）",
+        "tags": [
+          "Authentication"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegistration"
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "用户创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/UserResponse"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "无效的注册请求",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "409": {
+            "description": "电子邮件已存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "用户登录",
+        "deprecated": false,
+        "description": "获取访问令牌",
+        "tags": [
+          "Authentication"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "登录成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "token": {
+                              "type": "string",
+                              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxxxx"
+                            },
+                            "user": {
+                              "$ref": "#/components/schemas/UserResponse"
+                            }
+                          }
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "无效的凭据",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/users/me": {
+      "get": {
+        "summary": "获取当前用户信息",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "用户信息",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/UserResponse"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "401": {
+            "description": "未认证",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/hotels": {
+      "post": {
+        "summary": "创建新宾馆",
+        "deprecated": false,
+        "description": "仅限管理员用户调用",
+        "tags": [
+          "Hotels"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HotelRegistration"
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "宾馆创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/HotelResponse"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "403": {
+            "description": "无权限创建宾馆",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "get": {
+        "summary": "获取宾馆列表",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Hotels"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "宾馆名称搜索",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "description": "位置搜索",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "宾馆列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/HotelResponse"
+                          }
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/hotels/{hotelId}": {
+      "get": {
+        "summary": "获取宾馆详情",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Hotels"
+        ],
+        "parameters": [
+          {
+            "name": "hotelId",
+            "in": "path",
+            "description": "宾馆的唯一标识符",
+            "required": true,
+            "example": "h1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "宾馆详情",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/HotelResponse"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "宾馆不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/hotels/{hotelId}/rooms": {
+      "get": {
+        "summary": "获取宾馆房间类型",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Hotels"
+        ],
+        "parameters": [
+          {
+            "name": "hotelId",
+            "in": "path",
+            "description": "宾馆的唯一标识符",
+            "required": true,
+            "example": "h1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "available",
+            "in": "query",
+            "description": "仅查询可用房间",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "description": "查询特定日期的可用性",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "房间类型列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/RoomType"
+                          }
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/bookings": {
+      "post": {
+        "summary": "创建新预订",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Bookings"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookingRequest"
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "预订创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/BookingResponse"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "无效的预订请求",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          },
+          "409": {
+            "description": "房间不可用",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "get": {
+        "summary": "获取用户预订列表",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Bookings"
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "过滤特定状态的预订",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PENDING",
+                "CONFIRMED",
+                "CANCELLED",
+                "CHECKED_IN",
+                "CHECKED_OUT"
+              ]
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "description": "开始日期",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "预订列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/BookingResponse"
+                          }
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/bookings/{bookingId}": {
+      "get": {
+        "summary": "获取预订详情",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Bookings"
+        ],
+        "parameters": [
+          {
+            "name": "bookingId",
+            "in": "path",
+            "description": "预订记录的唯一标识符",
+            "required": true,
+            "example": "b1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "预订详情",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/BookingResponse"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "预订不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "put": {
+        "summary": "更新预订",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Bookings"
+        ],
+        "parameters": [
+          {
+            "name": "bookingId",
+            "in": "path",
+            "description": "预订记录的唯一标识符",
+            "required": true,
+            "example": "b1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "checkInDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "checkOutDate": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "guests": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "预订更新成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/BookingResponse"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "无效的更新请求",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      },
+      "delete": {
+        "summary": "取消预订",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Bookings"
+        ],
+        "parameters": [
+          {
+            "name": "bookingId",
+            "in": "path",
+            "description": "预订记录的唯一标识符",
+            "required": true,
+            "example": "b1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "example": "行程变更"
+                  }
+                }
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "预订已取消",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/BookingResponse"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "无法取消预订",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/bookings/{bookingId}/cancellation-policy": {
+      "get": {
+        "summary": "获取预订取消政策",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Bookings"
+        ],
+        "parameters": [
+          {
+            "name": "bookingId",
+            "in": "path",
+            "description": "预订记录的唯一标识符",
+            "required": true,
+            "example": "b1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "取消政策详情",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "policy": {
+                              "type": "string",
+                              "example": "提前48小时取消免费，48小时内取消收取50%费用"
+                            },
+                            "refundableAmount": {
+                              "type": "number",
+                              "format": "float"
+                            },
+                            "cancellationDeadline": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "404": {
+            "description": "预订不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/bookings/{bookingId}/deposit": {
+      "post": {
+        "summary": "支付预付款",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Payments"
+        ],
+        "parameters": [
+          {
+            "name": "bookingId",
+            "in": "path",
+            "description": "预订记录的唯一标识符",
+            "required": true,
+            "example": "b1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DepositRequest"
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "预付款支付成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/DepositResponse"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "无效的支付请求",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/checkins": {
+      "post": {
+        "summary": "办理入住",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "CheckIn"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckInRequest"
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "入住成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/CheckInResponse"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "无效的入住请求",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/checkins/{checkInId}/room": {
+      "put": {
+        "summary": "客人换房",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "CheckIn"
+        ],
+        "parameters": [
+          {
+            "name": "checkInId",
+            "in": "path",
+            "description": "入住记录的唯一标识符",
+            "required": true,
+            "example": "c1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoomChangeRequest"
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "换房成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/CheckInResponse"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "无效的换房请求",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/checkouts": {
+      "post": {
+        "summary": "办理退房",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "CheckIn"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckOutRequest"
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "退房成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/CheckOutResponse"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "无效的退房请求",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/reports/sales": {
+      "get": {
+        "summary": "获取销售统计报表",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "Reports"
+        ],
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "hotelId",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "销售统计数据",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/SalesReportResponse"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "400": {
+            "description": "无效的日期范围",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/admin/users/{userId}/role": {
+      "put": {
+        "summary": "修改用户角色",
+        "deprecated": false,
+        "description": "仅限系统管理员调用",
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "example": "",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "role"
+                ],
+                "properties": {
+                  "role": {
+                    "type": "string",
+                    "enum": [
+                      "GUEST",
+                      "HOTEL_ADMIN",
+                      "SYSTEM_ADMIN"
+                    ]
+                  }
+                }
+              },
+              "example": ""
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "角色更新成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Result"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/UserResponse"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          },
+          "403": {
+            "description": "无权限修改角色",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Result": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 0
+          },
+          "msg": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "type": "object",
+            "properties": {}
+          }
+        },
+        "description": "统一响应结果包装模型"
+      },
+      "EmptyData": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "UserRegistration": {
+        "type": "object",
+        "required": [
+          "email",
+          "password",
+          "fullName"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "minLength": 8,
+            "example": "SecurePass123!"
+          },
+          "fullName": {
+            "type": "string",
+            "example": "张三"
+          },
+          "phone": {
+            "type": "string",
+            "example": "13800138000"
+          },
+          "userType": {
+            "type": "string",
+            "enum": [
+              "GUEST",
+              "HOTEL_ADMIN"
+            ],
+            "default": "GUEST",
+            "example": "GUEST"
+          }
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "userType": {
+            "type": "string",
+            "enum": [
+              "GUEST",
+              "HOTEL_ADMIN"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "hotelId": {
+            "type": "string",
+            "nullable": true,
+            "example": "h1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8"
+          }
+        }
+      },
+      "HotelRegistration": {
+        "type": "object",
+        "required": [
+          "name",
+          "address",
+          "phone",
+          "adminUserId"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "阳光快捷宾馆"
+          },
+          "address": {
+            "type": "string",
+            "example": "北京市海淀区中关村大街1号"
+          },
+          "phone": {
+            "type": "string",
+            "example": "010-88889999"
+          },
+          "description": {
+            "type": "string",
+            "example": "经济型连锁酒店，提供舒适住宿体验"
+          },
+          "adminUserId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8"
+          }
+        }
+      },
+      "HotelResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "h1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 5,
+            "example": 4.2
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "RoomType": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "example": "标准大床房"
+          },
+          "basePrice": {
+            "type": "number",
+            "format": "float",
+            "example": 299
+          },
+          "capacity": {
+            "type": "integer",
+            "example": 2
+          },
+          "amenities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "免费WiFi",
+              "空调",
+              "独立卫浴"
+            ]
+          }
+        }
+      },
+      "BookingRequest": {
+        "type": "object",
+        "required": [
+          "hotelId",
+          "roomId",
+          "checkInDate",
+          "checkOutDate",
+          "guests"
+        ],
+        "properties": {
+          "hotelId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roomId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "checkInDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2023-10-01"
+          },
+          "checkOutDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2023-10-05"
+          },
+          "guests": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 2
+          },
+          "discountCode": {
+            "type": "string",
+            "nullable": true,
+            "example": "WELCOME10"
+          }
+        }
+      },
+      "BookingResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "b1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "hotelId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roomId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roomType": {
+            "$ref": "#/components/schemas/RoomType"
+          },
+          "checkInDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "checkOutDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "guests": {
+            "type": "integer"
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "float",
+            "example": 1196
+          },
+          "discountApplied": {
+            "type": "string",
+            "nullable": true,
+            "example": "WELCOME10"
+          },
+          "discountAmount": {
+            "type": "number",
+            "format": "float",
+            "example": 119.6
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "CONFIRMED",
+              "CANCELLED",
+              "CHECKED_IN",
+              "CHECKED_OUT"
+            ],
+            "default": "PENDING"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DepositRequest": {
+        "type": "object",
+        "required": [
+          "amount",
+          "paymentMethod"
+        ],
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "example": 500
+          },
+          "paymentMethod": {
+            "type": "string",
+            "enum": [
+              "CREDIT_CARD",
+              "ALIPAY",
+              "WECHAT_PAY"
+            ],
+            "example": "ALIPAY"
+          },
+          "bookingId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "b1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8"
+          }
+        }
+      },
+      "DepositResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8"
+          },
+          "bookingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amount": {
+            "type": "number",
+            "format": "float"
+          },
+          "paymentMethod": {
+            "type": "string"
+          },
+          "transactionId": {
+            "type": "string",
+            "example": "txn_20231001123456"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "COMPLETED",
+              "FAILED",
+              "REFUNDED"
+            ],
+            "default": "PENDING"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CheckInRequest": {
+        "type": "object",
+        "required": [
+          "bookingId",
+          "idNumber",
+          "idType"
+        ],
+        "properties": {
+          "bookingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "idNumber": {
+            "type": "string",
+            "example": "110101199003072316"
+          },
+          "idType": {
+            "type": "string",
+            "enum": [
+              "ID_CARD",
+              "PASSPORT",
+              "DRIVING_LICENSE"
+            ],
+            "example": "ID_CARD"
+          },
+          "specialRequests": {
+            "type": "string",
+            "nullable": true,
+            "example": "高层无烟房"
+          }
+        }
+      },
+      "CheckInResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "c1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8"
+          },
+          "bookingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roomId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "checkInTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "idNumber": {
+            "type": "string"
+          },
+          "idType": {
+            "type": "string"
+          },
+          "roomNumber": {
+            "type": "string",
+            "example": "808"
+          }
+        }
+      },
+      "RoomChangeRequest": {
+        "type": "object",
+        "required": [
+          "newRoomId"
+        ],
+        "properties": {
+          "newRoomId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reason": {
+            "type": "string",
+            "example": "客人要求升级房型"
+          }
+        }
+      },
+      "CheckOutRequest": {
+        "type": "object",
+        "required": [
+          "checkInId"
+        ],
+        "properties": {
+          "checkInId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "additionalCharges": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "example": "迷你吧消费"
+                },
+                "amount": {
+                  "type": "number",
+                  "format": "float",
+                  "example": 85.5
+                }
+              }
+            }
+          }
+        }
+      },
+      "CheckOutResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "checkInId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "checkOutTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "float"
+          },
+          "paymentStatus": {
+            "type": "string",
+            "enum": [
+              "PAID",
+              "PARTIAL",
+              "PENDING"
+            ]
+          },
+          "invoiceUrl": {
+            "type": "string",
+            "format": "uri",
+            "example": "https://api.hotel-system.com/invoices/inv_123456.pdf"
+          }
+        }
+      },
+      "SalesReportRequest": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2023-01-01"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2023-12-31"
+          },
+          "hotelId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        }
+      },
+      "SalesReportResponse": {
+        "type": "object",
+        "properties": {
+          "period": {
+            "type": "string",
+            "example": "2023-01-01 至 2023-12-31"
+          },
+          "totalRevenue": {
+            "type": "number",
+            "format": "float",
+            "example": 156800.5
+          },
+          "occupancyRate": {
+            "type": "number",
+            "format": "float",
+            "example": 78.5
+          },
+          "topRoomTypes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "roomType": {
+                  "type": "string",
+                  "example": "豪华套房"
+                },
+                "revenue": {
+                  "type": "number",
+                  "format": "float",
+                  "example": 45000
+                },
+                "count": {
+                  "type": "integer",
+                  "example": 120
+                }
+              }
+            }
+          },
+          "monthlyTrend": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "month": {
+                  "type": "string",
+                  "example": "2023-01"
+                },
+                "revenue": {
+                  "type": "number",
+                  "format": "float",
+                  "example": 12500
+                },
+                "bookings": {
+                  "type": "integer",
+                  "example": 45
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 40001
+          },
+          "message": {
+            "type": "string",
+            "example": "无效的日期范围"
+          },
+          "details": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {},
+            "example": {
+              "checkInDate": "必须是未来日期",
+              "checkOutDate": "必须晚于入住日期"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {}
+  },
+  "servers": [],
+  "security": []
+}
