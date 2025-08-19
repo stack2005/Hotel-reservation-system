@@ -95,14 +95,14 @@ function App() {
           style={{ flex: 1, minWidth: 0 }}
         />
       </Header>
-      <Content style={{ padding: '0 48px' }}>
+      <Content style={{ padding: 0, height: 'calc(100vh - 64px - 70px)' }}>
         <div
           style={{
             background: colorBgContainer,
-            minHeight: 280,
-            padding: 24,
-            borderRadius: 8,
-            marginTop: 16,
+            height: '100%',
+            padding: 0,
+            borderRadius: 0,
+            marginTop: 0,
           }}
         >
           <Outlet />
